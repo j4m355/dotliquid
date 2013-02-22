@@ -17,7 +17,7 @@ namespace DotLiquid.Tests
 		[Test]
 		public void TestVariableBeginning()
 		{
-			Template template = Template.Parse("{{funk}}  ");
+			Template template = Template.Parse("<<funk>>  ");
 			Assert.AreEqual(2, template.Root.NodeList.Count);
 			ExtendedCollectionAssert.AllItemsAreInstancesOfTypes(template.Root.NodeList,
 				new[] { typeof(Variable), typeof(string) });
@@ -26,7 +26,7 @@ namespace DotLiquid.Tests
 		[Test]
 		public void TestVariableEnd()
 		{
-			Template template = Template.Parse("  {{funk}}");
+			Template template = Template.Parse("  <<funk>>");
 			Assert.AreEqual(2, template.Root.NodeList.Count);
 			ExtendedCollectionAssert.AllItemsAreInstancesOfTypes(template.Root.NodeList,
 				new[] { typeof(string), typeof(Variable) });
@@ -35,7 +35,7 @@ namespace DotLiquid.Tests
 		[Test]
 		public void TestVariableMiddle()
 		{
-			Template template = Template.Parse("  {{funk}}  ");
+			Template template = Template.Parse("  <<funk>>  ");
 			Assert.AreEqual(3, template.Root.NodeList.Count);
 			ExtendedCollectionAssert.AllItemsAreInstancesOfTypes(template.Root.NodeList,
 				new[] { typeof(string), typeof(Variable), typeof(string) });
@@ -44,7 +44,7 @@ namespace DotLiquid.Tests
 		[Test]
 		public void TestVariableManyEmbeddedFragments()
 		{
-			Template template = Template.Parse("  {{funk}} {{so}} {{brother}} ");
+			Template template = Template.Parse("  <<funk>> <<so>> <<brother>> ");
 			Assert.AreEqual(7, template.Root.NodeList.Count);
 			ExtendedCollectionAssert.AllItemsAreInstancesOfTypes(template.Root.NodeList,
 				new[]

@@ -209,9 +209,9 @@ namespace DotLiquid.Tests
 		{
 			Template.RegisterFilter(typeof(MoneyFilter));
 
-			Assert.AreEqual(" 1000$ ", Template.Parse("{{1000 | money}}").Render());
-			Assert.AreEqual(" 1000$ CAD ", Template.Parse("{{1000 | money}}").Render(new RenderParameters { Filters = new[] { typeof(CanadianMoneyFilter) } }));
-			Assert.AreEqual(" 1000$ CAD ", Template.Parse("{{1000 | money}}").Render(new RenderParameters { Filters = new[] { typeof(CanadianMoneyFilter) } }));
+			Assert.AreEqual(" 1000$ ", Template.Parse("<<1000 | money>>").Render());
+			Assert.AreEqual(" 1000$ CAD ", Template.Parse("<<1000 | money>>").Render(new RenderParameters { Filters = new[] { typeof(CanadianMoneyFilter) } }));
+			Assert.AreEqual(" 1000$ CAD ", Template.Parse("<<1000 | money>>").Render(new RenderParameters { Filters = new[] { typeof(CanadianMoneyFilter) } }));
 		}
 
 		[Test]

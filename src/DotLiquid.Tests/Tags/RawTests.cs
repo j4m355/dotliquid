@@ -15,8 +15,8 @@ namespace DotLiquid.Tests.Tags
 		[Test]
 		public void TestOutputInRaw()
 		{
-			Helper.AssertTemplateResult("{{ test }}",
-				"{% raw %}{{ test }}{% endraw %}");
+			Helper.AssertTemplateResult("<< test >>",
+				"{% raw %}<< test >>{% endraw %}");
 		}
 	}
 }

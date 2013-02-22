@@ -19,9 +19,9 @@ namespace DotLiquid
 		public static readonly string TagEnd = R.Q(@"\%\}");
 		public static readonly string VariableSignature = R.Q(@"\(?[\w\-\.\[\]]\)?");
 		public static readonly string VariableSegment = R.Q(@"[\w\-]");
-		public static readonly string VariableStart = R.Q(@"\{\{");
-		public static readonly string VariableEnd = R.Q(@"\}\}");
-		public static readonly string VariableIncompleteEnd = R.Q(@"\}\}?");
+		public static readonly string VariableStart = R.Q(@"<<");
+		public static readonly string VariableEnd = R.Q(@">>");
+		public static readonly string VariableIncompleteEnd = R.Q(@">>?");
 		public static readonly string QuotedString = R.Q(@"""[^""]*""|'[^']*'");
 		public static readonly string QuotedFragment = string.Format(R.Q(@"{0}|(?:[^\s,\|'""]|{0})+"), QuotedString);
 		public static readonly string QuotedAssignFragment = string.Format(R.Q(@"{0}|(?:[^\s\|'""]|{0})+"), QuotedString);
@@ -31,11 +31,11 @@ namespace DotLiquid
 		public static readonly string SpacelessFilter = string.Format(R.Q(@"^(?:'[^']+'|""[^""]+""|[^'""])*{0}(?:{1})(?:{2}(?:{3})*)?"), FilterSeparator, StrictQuotedFragment, FirstFilterArgument, OtherFilterArgument);
 		public static readonly string Expression = string.Format(R.Q(@"(?:{0}(?:{1})*)"), QuotedFragment, SpacelessFilter);
 		public static readonly string TagAttributes = string.Format(R.Q(@"(\w+)\s*\:\s*({0})"), QuotedFragment);
-		public static readonly string AnyStartingTag = R.Q(@"\{\{|\{\%");
+		public static readonly string AnyStartingTag = R.Q(@"<<|\{\%");
 		public static readonly string PartialTemplateParser = string.Format(R.Q(@"{0}.*?{1}|{2}.*?{3}"), TagStart, TagEnd, VariableStart, VariableIncompleteEnd);
 		public static readonly string TemplateParser = string.Format(R.Q(@"({0}|{1})"), PartialTemplateParser, AnyStartingTag);
 		public static readonly string VariableParser = string.Format(R.Q(@"\[[^\]]+\]|{0}+\??"), VariableSegment);
-		public static readonly string LiteralShorthand = R.Q(@"^(?:\{\{\{\s?)(.*?)(?:\s*\}\}\})$");
+		public static readonly string LiteralShorthand = R.Q(@"^(?:<<<\s?)(.*?)(?:\s*>>>)$");
 		public static readonly string CommentShorthand = R.Q(@"^(?:\{\s?\#\s?)(.*?)(?:\s*\#\s?\})$");
 		public static bool UseRubyDateFormat = false;
 

@@ -275,8 +275,8 @@ namespace DotLiquid.Tests
 		public void TestOverrideGlobalFilter()
 		{
 			Template.RegisterFilter(typeof(GlobalFilters));
-			Assert.AreEqual("Global test", Template.Parse("{{'test' | notice }}").Render());
-			Assert.AreEqual("Local test", Template.Parse("{{'test' | notice }}").Render(new RenderParameters { Filters = new[] { typeof(LocalFilters) } }));
+			Assert.AreEqual("Global test", Template.Parse("<<'test' | notice >>").Render());
+			Assert.AreEqual("Local test", Template.Parse("<<'test' | notice >>").Render(new RenderParameters { Filters = new[] { typeof(LocalFilters) } }));
 		}
 
 		[Test]

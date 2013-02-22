@@ -16,13 +16,13 @@ namespace DotLiquid.Tests.Tags
 				switch (templatePath)
 				{
 					case "product":
-						return "Product: {{ product.title }} ";
+						return "Product: << product.title >> ";
 
 					case "locale_variables":
-						return "Locale: {{echo1}} {{echo2}}";
+						return "Locale: <<echo1>> <<echo2>>";
 
 					case "variant":
-						return "Variant: {{ variant.title }}";
+						return "Variant: << variant.title >>";
 
 					case "nested_template":
 						return "{% include 'header' %} {% include 'body' %} {% include 'footer' %}";
@@ -31,7 +31,7 @@ namespace DotLiquid.Tests.Tags
 						return "body {% include 'body_detail' %}";
 
 					case "nested_product_template":
-						return "Product: {{ nested_product_template.title }} {%include 'details'%} ";
+						return "Product: << nested_product_template.title >> {%include 'details'%} ";
 
 					case "recursively_nested_template":
 						return "-{% include 'recursively_nested_template' %}";

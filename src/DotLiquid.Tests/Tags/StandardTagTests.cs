@@ -65,7 +65,7 @@ namespace DotLiquid.Tests.Tags
 				{ "Graham Greene", "English" },
 				{ "F. Scott Fitzgerald", "American" }
 			};
-			Helper.AssertTemplateResult(" English  American ", "{%for item in authors%} {{ item }} {%endfor%}",
+			Helper.AssertTemplateResult(" English  American ", "{%for item in authors%} << item >> {%endfor%}",
 				Hash.FromAnonymousObject(new { authors = dictionary.Values }));
 		}
 
@@ -93,23 +93,23 @@ namespace DotLiquid.Tests.Tags
 		[Test]
 		public void TestForWithRange()
 		{
-			Helper.AssertTemplateResult(" 1  2  3 ", "{%for item in (1..3) %} {{item}} {%endfor%}");
+			Helper.AssertTemplateResult(" 1  2  3 ", "{%for item in (1..3) %} <<item>> {%endfor%}");
 		}
 
 		[Test]
 		public void TestForWithVariable()
 		{
-			Helper.AssertTemplateResult(" 1  2  3 ", "{%for item in array%} {{item}} {%endfor%}",
+			Helper.AssertTemplateResult(" 1  2  3 ", "{%for item in array%} <<item>> {%endfor%}",
 				Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3 } }));
-			Helper.AssertTemplateResult("123", "{%for item in array%}{{item}}{%endfor%}",
+			Helper.AssertTemplateResult("123", "{%for item in array%}<<item>>{%endfor%}",
 				Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3 } }));
-			Helper.AssertTemplateResult("123", "{% for item in array %}{{item}}{% endfor %}",
+			Helper.AssertTemplateResult("123", "{% for item in array %}<<item>>{% endfor %}",
 				Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3 } }));
-			Helper.AssertTemplateResult("abcd", "{%for item in array%}{{item}}{%endfor%}",
+			Helper.AssertTemplateResult("abcd", "{%for item in array%}<<item>>{%endfor%}",
 				Hash.FromAnonymousObject(new { array = new[] { "a", "b", "c", "d" } }));
-			Helper.AssertTemplateResult("a b c", "{%for item in array%}{{item}}{%endfor%}",
+			Helper.AssertTemplateResult("a b c", "{%for item in array%}<<item>>{%endfor%}",
 				Hash.FromAnonymousObject(new { array = new[] { "a", " ", "b", " ", "c" } }));
-			Helper.AssertTemplateResult("abc", "{%for item in array%}{{item}}{%endfor%}",
+			Helper.AssertTemplateResult("abc", "{%for item in array%}<<item>>{%endfor%}",
 				Hash.FromAnonymousObject(new { array = new[] { "a", "", "b", "", "c" } }));
 		}
 
@@ -118,13 +118,13 @@ namespace DotLiquid.Tests.Tags
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3 } });
 			Helper.AssertTemplateResult(" 1/3  2/3  3/3 ",
-				"{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}", assigns);
-			Helper.AssertTemplateResult(" 1  2  3 ", "{%for item in array%} {{forloop.index}} {%endfor%}", assigns);
-			Helper.AssertTemplateResult(" 0  1  2 ", "{%for item in array%} {{forloop.index0}} {%endfor%}", assigns);
-			Helper.AssertTemplateResult(" 2  1  0 ", "{%for item in array%} {{forloop.rindex0}} {%endfor%}", assigns);
-			Helper.AssertTemplateResult(" 3  2  1 ", "{%for item in array%} {{forloop.rindex}} {%endfor%}", assigns);
-			Helper.AssertTemplateResult(" true  false  false ", "{%for item in array%} {{forloop.first}} {%endfor%}", assigns);
-			Helper.AssertTemplateResult(" false  false  true ", "{%for item in array%} {{forloop.last}} {%endfor%}", assigns);
+				"{%for item in array%} <<forloop.index>>/<<forloop.length>> {%endfor%}", assigns);
+			Helper.AssertTemplateResult(" 1  2  3 ", "{%for item in array%} <<forloop.index>> {%endfor%}", assigns);
+			Helper.AssertTemplateResult(" 0  1  2 ", "{%for item in array%} <<forloop.index0>> {%endfor%}", assigns);
+			Helper.AssertTemplateResult(" 2  1  0 ", "{%for item in array%} <<forloop.rindex0>> {%endfor%}", assigns);
+			Helper.AssertTemplateResult(" 3  2  1 ", "{%for item in array%} <<forloop.rindex>> {%endfor%}", assigns);
+			Helper.AssertTemplateResult(" true  false  false ", "{%for item in array%} <<forloop.first>> {%endfor%}", assigns);
+			Helper.AssertTemplateResult(" false  false  true ", "{%for item in array%} <<forloop.last>> {%endfor%}", assigns);
 		}
 
 		[Test]
@@ -138,10 +138,10 @@ namespace DotLiquid.Tests.Tags
 		public void TestLimiting()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } });
-			Helper.AssertTemplateResult("12", "{%for i in array limit:2 %}{{ i }}{%endfor%}", assigns);
-			Helper.AssertTemplateResult("1234", "{%for i in array limit:4 %}{{ i }}{%endfor%}", assigns);
-			Helper.AssertTemplateResult("3456", "{%for i in array limit:4 offset:2 %}{{ i }}{%endfor%}", assigns);
-			Helper.AssertTemplateResult("3456", "{%for i in array limit: 4 offset: 2 %}{{ i }}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("12", "{%for i in array limit:2 %}<< i >>{%endfor%}", assigns);
+			Helper.AssertTemplateResult("1234", "{%for i in array limit:4 %}<< i >>{%endfor%}", assigns);
+			Helper.AssertTemplateResult("3456", "{%for i in array limit:4 offset:2 %}<< i >>{%endfor%}", assigns);
+			Helper.AssertTemplateResult("3456", "{%for i in array limit: 4 offset: 2 %}<< i >>{%endfor%}", assigns);
 		}
 
 		[Test]
@@ -150,32 +150,32 @@ namespace DotLiquid.Tests.Tags
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } });
 			assigns["limit"] = 2;
 			assigns["offset"] = 2;
-			Helper.AssertTemplateResult("34", "{%for i in array limit: limit offset: offset %}{{ i }}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("34", "{%for i in array limit: limit offset: offset %}<< i >>{%endfor%}", assigns);
 		}
 
 		[Test]
 		public void TestNestedFor()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { new[] { 1, 2 }, new[] { 3, 4 }, new[] { 5, 6 } } });
-			Helper.AssertTemplateResult("123456", "{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("123456", "{%for item in array%}{%for i in item%}<< i >>{%endfor%}{%endfor%}", assigns);
 		}
 
 		[Test]
 		public void TestOffsetOnly()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } });
-			Helper.AssertTemplateResult("890", "{%for i in array offset:7 %}{{ i }}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("890", "{%for i in array offset:7 %}<< i >>{%endfor%}", assigns);
 		}
 
 		[Test]
 		public void TestPauseResume()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = Hash.FromAnonymousObject(new { items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } }) });
-			const string markup = @"{%for i in array.items limit: 3 %}{{i}}{%endfor%}
+			const string markup = @"{%for i in array.items limit: 3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
+				{%for i in array.items offset:continue limit: 3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}";
+				{%for i in array.items offset:continue limit: 3 %}<<i>>{%endfor%}";
 			const string expected = @"123
 				next
 				456
@@ -188,11 +188,11 @@ namespace DotLiquid.Tests.Tags
 		public void TestPauseResumeLimit()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = Hash.FromAnonymousObject(new { items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } }) });
-			const string markup = @"{%for i in array.items limit:3 %}{{i}}{%endfor%}
+			const string markup = @"{%for i in array.items limit:3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit:3 %}{{i}}{%endfor%}
+				{%for i in array.items offset:continue limit:3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit:1 %}{{i}}{%endfor%}";
+				{%for i in array.items offset:continue limit:1 %}<<i>>{%endfor%}";
 			const string expected = @"123
 				next
 				456
@@ -206,11 +206,11 @@ namespace DotLiquid.Tests.Tags
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = Hash.FromAnonymousObject(new { items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } }) });
 			const string markup = @"
-				{%for i in array.items limit:3 %}{{i}}{%endfor%}
+				{%for i in array.items limit:3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit:3 %}{{i}}{%endfor%}
+				{%for i in array.items offset:continue limit:3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit:1000 %}{{i}}{%endfor%}";
+				{%for i in array.items offset:continue limit:1000 %}<<i>>{%endfor%}";
 			const string expected = @"
 				123
 				next
@@ -225,11 +225,11 @@ namespace DotLiquid.Tests.Tags
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = Hash.FromAnonymousObject(new { items = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 } }) });
 			const string markup = @"
-				{%for i in array.items limit:3 %}{{i}}{%endfor%}
+				{%for i in array.items limit:3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit:3 %}{{i}}{%endfor%}
+				{%for i in array.items offset:continue limit:3 %}<<i>>{%endfor%}
 				next
-				{%for i in array.items offset:continue limit:1000 offset:1000 %}{{i}}{%endfor%}";
+				{%for i in array.items offset:continue limit:1000 offset:1000 %}<<i>>{%endfor%}";
 			const string expected = @"
 				123
 				next
@@ -243,21 +243,21 @@ namespace DotLiquid.Tests.Tags
 		public void TestAssign()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { var = "content" });
-			Helper.AssertTemplateResult("var2:  var2:content", "var2:{{var2}} {%assign var2 = var%} var2:{{var2}}", assigns);
+			Helper.AssertTemplateResult("var2:  var2:content", "var2:<<var2>> {%assign var2 = var%} var2:<<var2>>", assigns);
 		}
 
 		[Test]
 		public void TestHyphenatedAssign()
 		{
 			Hash assigns = Hash.FromDictionary(new Dictionary<string, object> { { "a-b", "1" } });
-			Helper.AssertTemplateResult("a-b:1 a-b:2", "a-b:{{a-b}} {%assign a-b = 2 %}a-b:{{a-b}}", assigns);
+			Helper.AssertTemplateResult("a-b:1 a-b:2", "a-b:<<a-b>> {%assign a-b = 2 %}a-b:<<a-b>>", assigns);
 		}
 
 		[Test]
 		public void TestAssignWithColonAndSpaces()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { var = new Dictionary<string, object> { { "a:b c", new { paged = 1 } } } });
-			Helper.AssertTemplateResult("var2: 1", "{%assign var2 = var['a:b c'].paged %}var2: {{var2}}", assigns);
+			Helper.AssertTemplateResult("var2: 1", "{%assign var2 = var['a:b c'].paged %}var2: <<var2>>", assigns);
 		}
 
 		[Test]
@@ -265,14 +265,14 @@ namespace DotLiquid.Tests.Tags
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { var = "content" });
 			Helper.AssertTemplateResult("content foo content foo ",
-				"{{ var2 }}{% capture var2 %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}", assigns);
+				"<< var2 >>{% capture var2 %}<< var >> foo {% endcapture %}<< var2 >><< var2 >>", assigns);
 		}
 
 		[Test]
 		public void TestCaptureDetectsBadSyntax()
 		{
 			Assert.Throws<SyntaxException>(() =>
-				Helper.AssertTemplateResult("content foo content foo ", "{{ var2 }}{% capture %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}", Hash.FromAnonymousObject(new { var = "content" })));
+				Helper.AssertTemplateResult("content foo content foo ", "<< var2 >>{% capture %}<< var >> foo {% endcapture %}<< var2 >><< var2 >>", Hash.FromAnonymousObject(new { var = "content" })));
 		}
 
 		[Test]
@@ -360,7 +360,7 @@ namespace DotLiquid.Tests.Tags
 		public void TestAssignFromCase()
 		{
 			// Example from the shopify forums
-			const string code = "{% case collection.handle %}{% when 'menswear-jackets' %}{% assign ptitle = 'menswear' %}{% when 'menswear-t-shirts' %}{% assign ptitle = 'menswear' %}{% else %}{% assign ptitle = 'womenswear' %}{% endcase %}{{ ptitle }}";
+			const string code = "{% case collection.handle %}{% when 'menswear-jackets' %}{% assign ptitle = 'menswear' %}{% when 'menswear-t-shirts' %}{% assign ptitle = 'menswear' %}{% else %}{% assign ptitle = 'womenswear' %}{% endcase %}<< ptitle >>";
 			Template template = Template.Parse(code);
 			Assert.AreEqual("menswear", template.Render(Hash.FromAnonymousObject(new { collection = new { handle = "menswear-jackets" } })));
 			Assert.AreEqual("menswear", template.Render(Hash.FromAnonymousObject(new { collection = new { handle = "menswear-t-shirts" } })));
@@ -408,19 +408,19 @@ namespace DotLiquid.Tests.Tags
 		[Test]
 		public void TestAssign2()
 		{
-			Assert.AreEqual("variable", Template.Parse("{% assign a = 'variable' %}{{a}}").Render());
+			Assert.AreEqual("variable", Template.Parse("{% assign a = 'variable' %}<<a>>").Render());
 		}
 
 		[Test]
 		public void TestAssignAnEmptyString()
 		{
-			Assert.AreEqual("", Template.Parse("{% assign a = '' %}{{a}}").Render());
+			Assert.AreEqual("", Template.Parse("{% assign a = '' %}<<a>>").Render());
 		}
 
 		[Test]
 		public void TestAssignIsGlobal()
 		{
-			Assert.AreEqual("variable", Template.Parse("{%for i in (1..2) %}{% assign a = 'variable'%}{% endfor %}{{a}}").Render());
+			Assert.AreEqual("variable", Template.Parse("{%for i in (1..2) %}{% assign a = 'variable'%}{% endfor %}<<a>>").Render());
 		}
 
 		[Test]
@@ -470,14 +470,14 @@ namespace DotLiquid.Tests.Tags
 		public void TestSizeOfArray()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3, 4 } });
-			Helper.AssertTemplateResult("array has 4 elements", "array has {{ array.size }} elements", assigns);
+			Helper.AssertTemplateResult("array has 4 elements", "array has << array.size >> elements", assigns);
 		}
 
 		[Test]
 		public void TestSizeOfHash()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { hash = Hash.FromAnonymousObject(new { a = 1, b = 2, c = 3, d = 4 }) });
-			Helper.AssertTemplateResult("hash has 4 elements", "hash has {{ hash.size }} elements", assigns);
+			Helper.AssertTemplateResult("hash has 4 elements", "hash has << hash.size >> elements", assigns);
 		}
 
 		[Test]
@@ -493,17 +493,17 @@ namespace DotLiquid.Tests.Tags
 		public void TestForReversed()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 2, 3 } });
-			Helper.AssertTemplateResult("321", "{%for item in array reversed %}{{item}}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("321", "{%for item in array reversed %}<<item>>{%endfor%}", assigns);
 		}
 
 		[Test]
 		public void TestIfChanged()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 1, 2, 2, 3, 3 } });
-			Helper.AssertTemplateResult("123", "{%for item in array%}{%ifchanged%}{{item}}{% endifchanged %}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("123", "{%for item in array%}{%ifchanged%}<<item>>{% endifchanged %}{%endfor%}", assigns);
 
 			assigns = Hash.FromAnonymousObject(new { array = new[] { 1, 1, 1, 1 } });
-			Helper.AssertTemplateResult("1", "{%for item in array%}{%ifchanged%}{{item}}{% endifchanged %}{%endfor%}", assigns);
+			Helper.AssertTemplateResult("1", "{%for item in array%}{%ifchanged%}<<item>>{% endifchanged %}{%endfor%}", assigns);
 		}
 	}
 }

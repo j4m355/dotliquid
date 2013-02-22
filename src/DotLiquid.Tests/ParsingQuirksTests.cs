@@ -19,13 +19,13 @@ namespace DotLiquid.Tests
 		[Test]
 		public void TestRaiseOnSingleCloseBrace()
 		{
-			Assert.Throws<SyntaxException>(() => Template.Parse("text {{method} oh nos!"));
+			Assert.Throws<SyntaxException>(() => Template.Parse("text <<method> oh nos!"));
 		}
 
 		[Test]
 		public void TestRaiseOnLabelAndNoCloseBrace()
 		{
-			Assert.Throws<SyntaxException>(() => Template.Parse("TEST {{ "));
+			Assert.Throws<SyntaxException>(() => Template.Parse("TEST << "));
 		}
 
 		[Test]
@@ -39,9 +39,9 @@ namespace DotLiquid.Tests
 		{
 			Assert.DoesNotThrow(() =>
 			{
-				Template.Parse("{{test |a|b|}}");
-				Template.Parse("{{test}}");
-				Template.Parse("{{|test|}}");
+				Template.Parse("<<test |a|b|>>");
+				Template.Parse("<<test>>");
+				Template.Parse("<<|test|>>");
 			});
 		}
 

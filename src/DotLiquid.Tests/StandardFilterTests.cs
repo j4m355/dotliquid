@@ -89,7 +89,7 @@ namespace DotLiquid.Tests
 		{
 			CollectionAssert.AreEqual(new[] { 1, 2, 3, 4 },
 				StandardFilters.Map(new[] { new { a = 1 }, new { a = 2 }, new { a = 3 }, new { a = 4 } }, "a"));
-			Helper.AssertTemplateResult("abc", "{{ ary | map:'foo' | map:'bar' }}",
+			Helper.AssertTemplateResult("abc", "<< ary | map:'foo' | map:'bar' >>",
 				Hash.FromAnonymousObject(
 					new
 					{
@@ -127,7 +127,7 @@ namespace DotLiquid.Tests
 
 			Assert.AreEqual("hi", StandardFilters.Date("hi", "MMMM"));
 
-			Template template = Template.Parse(@"{{ hi | date:""MMMM"" }}");
+			Template template = Template.Parse(@"<< hi | date:""MMMM"" >>");
 			Assert.AreEqual("hi", template.Render(Hash.FromAnonymousObject(new { hi = "hi" })));
 		}
 
@@ -156,7 +156,7 @@ namespace DotLiquid.Tests
 
 			Assert.AreEqual("hi", StandardFilters.Date("hi", "%M"));
 
-			Template template = Template.Parse(@"{{ hi | date:""%M"" }}");
+			Template template = Template.Parse(@"<< hi | date:""%M"" >>");
 			Assert.AreEqual("hi", template.Render(Hash.FromAnonymousObject(new { hi = "hi" })));
 		}
 
@@ -174,7 +174,7 @@ namespace DotLiquid.Tests
 		{
 			Assert.AreEqual("b b b b", StandardFilters.Replace("a a a a", "a", "b"));
 			Assert.AreEqual("b a a a", StandardFilters.ReplaceFirst("a a a a", "a", "b"));
-			Helper.AssertTemplateResult("b a a a", "{{ 'a a a a' | replace_first: 'a', 'b' }}");
+			Helper.AssertTemplateResult("b a a a", "<< 'a a a a' | replace_first: 'a', 'b' >>");
 		}
 
 		[Test]
@@ -182,84 +182,84 @@ namespace DotLiquid.Tests
 		{
 			Assert.AreEqual("   ", StandardFilters.Remove("a a a a", "a"));
 			Assert.AreEqual("a a a", StandardFilters.RemoveFirst("a a a a", "a "));
-			Helper.AssertTemplateResult("a a a", "{{ 'a a a a' | remove_first: 'a ' }}");
+			Helper.AssertTemplateResult("a a a", "<< 'a a a a' | remove_first: 'a ' >>");
 		}
 
 		[Test]
 		public void TestPipesInStringArguments()
 		{
-			Helper.AssertTemplateResult("foobar", "{{ 'foo|bar' | remove: '|' }}");
+			Helper.AssertTemplateResult("foobar", "<< 'foo|bar' | remove: '|' >>");
 		}
 
 		[Test]
 		public void TestStripNewlines()
 		{
-			Helper.AssertTemplateResult("abc", "{{ source | strip_newlines }}", Hash.FromAnonymousObject(new { source = "a" + Environment.NewLine + "b" + Environment.NewLine + "c" }));
+			Helper.AssertTemplateResult("abc", "<< source | strip_newlines >>", Hash.FromAnonymousObject(new { source = "a" + Environment.NewLine + "b" + Environment.NewLine + "c" }));
 		}
 
 		[Test]
 		public void TestNewlinesToBr()
 		{
 			Helper.AssertTemplateResult("a<br />" + Environment.NewLine + "b<br />" + Environment.NewLine + "c",
-				"{{ source | newline_to_br }}",
+				"<< source | newline_to_br >>",
 				Hash.FromAnonymousObject(new { source = "a" + Environment.NewLine + "b" + Environment.NewLine + "c" }));
 		}
 
 		[Test]
 		public void TestPlus()
 		{
-			Helper.AssertTemplateResult("2", "{{ 1 | plus:1 }}");
-			Helper.AssertTemplateResult("11", "{{ '1' | plus:'1' }}");
+			Helper.AssertTemplateResult("2", "<< 1 | plus:1 >>");
+			Helper.AssertTemplateResult("11", "<< '1' | plus:'1' >>");
 		}
 
 		[Test]
 		public void TestMinus()
 		{
-			Helper.AssertTemplateResult("4", "{{ input | minus:operand }}", Hash.FromAnonymousObject(new { input = 5, operand = 1 }));
+			Helper.AssertTemplateResult("4", "<< input | minus:operand >>", Hash.FromAnonymousObject(new { input = 5, operand = 1 }));
 		}
 
 		[Test, SetCulture("fr-FR")]
 		public void TestMinusWithFrenchDecimalSeparator()
 		{
 			Helper.AssertTemplateResult(string.Format("1{0}2", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator),
-				"{{ 3,2 | minus:2 }}");
+				"<< 3,2 | minus:2 >>");
 		}
 
 		[Test]
 		public void TestTimes()
 		{
-			Helper.AssertTemplateResult("12", "{{ 3 | times:4 }}");
-			Helper.AssertTemplateResult("foofoofoofoo", "{{ 'foo' | times:4 }}");
+			Helper.AssertTemplateResult("12", "<< 3 | times:4 >>");
+			Helper.AssertTemplateResult("foofoofoofoo", "<< 'foo' | times:4 >>");
 		}
 
 		[Test]
 		public void TestAppend()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { a = "bc", b = "d" });
-			Helper.AssertTemplateResult("bcd", "{{ a | append: 'd'}}", assigns);
-			Helper.AssertTemplateResult("bcd", "{{ a | append: b}}", assigns);
+			Helper.AssertTemplateResult("bcd", "<< a | append: 'd'>>", assigns);
+			Helper.AssertTemplateResult("bcd", "<< a | append: b>>", assigns);
 		}
 
 		[Test]
 		public void TestPrepend()
 		{
 			Hash assigns = Hash.FromAnonymousObject(new { a = "bc", b = "a" });
-			Helper.AssertTemplateResult("abc", "{{ a | prepend: 'a'}}", assigns);
-			Helper.AssertTemplateResult("abc", "{{ a | prepend: b}}", assigns);
+			Helper.AssertTemplateResult("abc", "<< a | prepend: 'a'>>", assigns);
+			Helper.AssertTemplateResult("abc", "<< a | prepend: b>>", assigns);
 		}
 
 		[Test]
 		public void TestDividedBy()
 		{
-			Helper.AssertTemplateResult("4", "{{ 12 | divided_by:3 }}");
-			Helper.AssertTemplateResult("4", "{{ 14 | divided_by:3 }}");
-			Helper.AssertTemplateResult("5", "{{ 15 | divided_by:3 }}");
+			Helper.AssertTemplateResult("4", "<< 12 | divided_by:3 >>");
+			Helper.AssertTemplateResult("4", "<< 14 | divided_by:3 >>");
+			Helper.AssertTemplateResult("5", "<< 15 | divided_by:3 >>");
 		}
 
 		[Test]
 		public void TestModulo()
 		{
-			Helper.AssertTemplateResult("1", "{{ 3 | modulo:2 }}");
+			Helper.AssertTemplateResult("1", "<< 3 | modulo:2 >>");
 		}
 	}
 }

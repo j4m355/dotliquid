@@ -12,9 +12,9 @@ namespace DotLiquid.Tests.Tags
 		[Test]
 		public void TestEmptyLiteral()
 		{
-			Template t = Template.Parse("{% literal %}{% endliteral %}");
+			Template t = Template.Parse("<% literal %><% endliteral %>");
 			Assert.AreEqual(string.Empty, t.Render());
-			t = Template.Parse("{{{}}}");
+			t = Template.Parse("<<<>>>}");
 			Assert.AreEqual(string.Empty, t.Render());
 		}
 
@@ -35,21 +35,21 @@ namespace DotLiquid.Tests.Tags
 		[Test]
 		public void TestShorthandSyntax()
 		{
-			Template t = Template.Parse("{{{{% if 'gnomeslab' contains 'liquid' %}yes{ % endif %}}}}");
+			Template t = Template.Parse("<<<{% if 'gnomeslab' contains 'liquid' %}yes{ % endif %}>>>");
 			Assert.AreEqual("{% if 'gnomeslab' contains 'liquid' %}yes{ % endif %}", t.Render());
 		}
 
 		[Test]
 		public void TestLiteralsDontRemoveComments()
 		{
-			Template t = Template.Parse("{{{ {# comment #} }}}");
+			Template t = Template.Parse("<<< {# comment #} >>}");
 			Assert.AreEqual("{# comment #}", t.Render());
 		}
 
 		[Test]
 		public void TestFromShorthand()
 		{
-			Assert.AreEqual("{% literal %}gnomeslab{% endliteral %}", Literal.FromShortHand("{{{gnomeslab}}}"));
+			Assert.AreEqual("{% literal %}gnomeslab{% endliteral %}", Literal.FromShortHand("<<{gnomeslab>>}"));
 		}
 
 		[Test]

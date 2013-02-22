@@ -113,7 +113,7 @@ namespace DotLiquid.Tests.Tags
 			Template template = Template.Parse(
 				@"{% extends 'complex' %}
                     {% block another %}
-                        {{ block.super }} + some other content
+                        << block.super >> + some other content
                     {% endblock %}");
 
 			StringAssert.Contains("another block", template.Render());
